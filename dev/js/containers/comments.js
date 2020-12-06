@@ -28,13 +28,14 @@ class CommentsComponent extends Component {
     }
     renderNormalText(){
         return(
-            <div className= "commentContainer">
-                    <BorderWrapper borderWidth = {1} topGap = {1}>
+            <div className= "commentContainer" style={{ display:'inline-block'}}>
+                    <BorderWrapper innerPadding ={3} borderWidth={1} borderRadius={2}>
                         <div className= "commentText" >{this.props.index+1} --> {this.props.children}</div>
-                    </BorderWrapper>
+                    
                     <button className= "button-primary" onClick = {this.edit.bind(this)}>Edit</button>
                     <button className= "button-danger" onClick = {this.remove.bind(this)}>Remove</button>
-                    <br></br>
+                    </BorderWrapper>
+                    <div> <p></p>  </div>
             </div>
         );
     }

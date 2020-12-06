@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import BorderWrapper from 'react-border-wrapper'
 
 class AllowDuplicates extends Component {
     constructor(props) {
@@ -52,8 +52,10 @@ class AllowDuplicates extends Component {
         //console.log("In Render method of checkbox : checkbox "+  this.state.isCheckBoxChecked + "  allowDup: " +  allowDup);
         return(
             <div>
-                <input type= "checkbox" onChange = {this.handleCheckbox.bind(this)} defaultChecked= {allowDupState}/>
-                <h3>{msg}</h3>
+                <BorderWrapper innerPadding ={3} borderWidth={2} borderRadius={2}>
+                    <input type= "checkbox" onChange = {this.handleCheckbox.bind(this)} defaultChecked= {allowDupState}/>
+                    <h3>{msg}</h3>
+                </BorderWrapper>
             </div>
         );
     }

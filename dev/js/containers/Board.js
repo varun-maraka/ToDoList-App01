@@ -47,10 +47,12 @@ class Board extends Component {
         localStorage.setItem("comments",JSON.stringify(list));
     }
     eachComment(text, i){
-        return (
+        return (<div style={{ display:'inline-block'}}>
                 <CommentsComponent key={i} index={i} updateCommentText = {this.updateComment.bind(this)} deleteFromBoard = {this.removeComment.bind(this)}>
                    {text}  
                 </CommentsComponent>
+                &nbsp; &nbsp;
+                </div>
             );
     }
     addNewComment(text){
@@ -87,7 +89,7 @@ class Board extends Component {
         return(
             <div>
                 <button onClick= {this.addNewComment.bind(this,'Default Text')}className= "button-info create">Add New</button>
-                <div  className= "board">
+                <div  className= "board" >
                 {
                     this.state.comments.map(this.eachComment.bind(this))
                 }
