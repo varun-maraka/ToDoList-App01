@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CommentsComponent from './comments';
+import Arc_CommentsComponent from './arc_comments';
 
 class Board extends Component {
     constructor(props) {
@@ -7,19 +8,28 @@ class Board extends Component {
     
        this.input=React.createRef();
        this.state={
-        comments:[]
-          }
+        comments:[],
+        archived_comments:[]
+        }
     }
 
     componentDidMount() {
         const list = window.localStorage.getItem('comments');
+        const arc_list = window.localStorage.getItem('archived_comments');
         const parsedList = JSON.parse(list);
-        if(list == null){
-            return false
-        }
-        else{
+        const arc_list_parsed = JSON.parse(arc_list);
+        if(list == null ){
+            //return false
+        }else{
             this.setState({
-                comments: parsedList,
+                comments: parsedList
+            })
+        }
+        if(arc_list == null){
+
+        }else{
+            this.setState({
+                archived_comments : arc_list_parsed
             })
         }
     }
@@ -30,9 +40,25 @@ class Board extends Component {
         //this.setState({comments: arr});
 
         let list=JSON.parse(localStorage.getItem('comments'));
+        let text = list[i];
         list.splice(i,1);
         this.setState({comments: list});
         localStorage.setItem("comments",JSON.stringify(list));
+
+        if(localStorage.getItem('archived_comments')==null){
+            const list=[];
+            list.push(text);
+            localStorage.setItem("archived_comments",JSON.stringify(list))
+        }
+        else{
+            const list=JSON.parse(localStorage.getItem('archived_comments'));
+            list.push(text);
+            this.setState({archived_comments:list});
+            localStorage.setItem("archived_comments",JSON.stringify(list));
+        }
+        this.setState({
+            archived_comments:JSON.parse(localStorage.getItem('archived_comments'))
+        });
 
 
     }
@@ -54,6 +80,23 @@ class Board extends Component {
                 &nbsp; &nbsp;
                 </div>
             );
+    }
+
+    eachArchiveComment(text, i){
+        return (<div style={{ display:'inline-block'}}>
+                <Arc_CommentsComponent key={i} index={i} deleteFromArcBoard = {this.removeFromArchive.bind(this)}>
+                   {text}  
+                </Arc_CommentsComponent>
+                &nbsp; &nbsp;
+                </div>
+            );
+    }
+
+    removeFromArchive(i){ 
+        let list=JSON.parse(localStorage.getItem('archived_comments'));
+        list.splice(i,1);
+        this.setState({archived_comments: list});
+        localStorage.setItem("archived_comments",JSON.stringify(list));
     }
     addNewComment(text){
         //var arr = this.state.comments;
@@ -89,11 +132,19 @@ class Board extends Component {
         return(
             <div>
                 <button onClick= {this.addNewComment.bind(this,'Default Text')}className= "button-info create">Add New</button>
+                <p/>
                 <div  className= "board" >
                 {
                     this.state.comments.map(this.eachComment.bind(this))
                 }
                 </div> 
+                <hr/><hr/> <b><h2>Archive</h2></b> <p/>
+                <div className= "board">
+                {
+                    this.state.archived_comments.map(this.eachArchiveComment.bind(this))
+                }
+
+                </div>
             </div>
         );
     }
